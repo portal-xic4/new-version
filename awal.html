@@ -3,11 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal XI-C4 | Cinematic WebGL Experience</title>
+    <title>Portal XI-C4 | Cinematic Welcome</title>
     
     <link rel="stylesheet" href="style.css">
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS Tambahan khusus untuk penyempurnaan tampilan di HP */
+        @media (max-width: 768px) {
+            .viewport {
+                padding: 2rem 7% !important; /* Mengurangi padding pinggir di layar HP */
+                justify-content: space-between;
+            }
+
+            .logo {
+                font-size: 1rem !important;
+                letter-spacing: 0.2em !important;
+            }
+
+            .status-badge {
+                font-size: 0.6rem !important;
+                padding: 0.3rem 0.8rem !important;
+            }
+
+            .subtitle {
+                font-size: 0.65rem !important;
+                letter-spacing: 0.3em !important;
+                margin-bottom: 0.8rem !important;
+            }
+
+            .title {
+                font-size: 2.2rem !important; /* Ukuran judul disesuaikan agar tidak terlalu kebesaran di HP */
+                line-height: 1.2 !important;
+                margin-bottom: 1rem !important;
+            }
+
+            .description {
+                font-size: 0.85rem !important;
+                line-height: 1.6 !important;
+                margin-bottom: 2rem !important;
+                max-width: 100% !important;
+            }
+
+            .btn-primary {
+                padding: 1rem 2rem !important;
+                font-size: 0.7rem !important;
+                width: 100%; /* Membuat tombol selebar layar pada HP agar mudah dipencet */
+                text-align: center;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -16,32 +62,32 @@
     </video>
     <div class="video-overlay"></div>
 
-    <canvas id="webgl-canvas"></canvas>
-
     <div class="viewport">
-        <header class="header">
-            <div class="logo">XI C4</div>
-        </header>
+        
+        <div class="header">
+            <div class="logo">PORTAL C4</div>
+            <div class="status-badge">ONLINE SYSTEM</div>
+        </div>
 
-        <main class="hero">
-            <div class="hero-content">
-                <p class="subtitle">WEBSITE XI-C4</p>
-                <h1 class="title">REKAPITULASI<br><em>PRESENSI & TUGAS</em></h1>
-                <p class="description">
-                    Semua Informasi Terkait Presensi dan Tugas Siswa.
-                </p>
-                
-                <div class="action-group">
+        <div class="hero">
+            <p class="subtitle">PORTAL AKADEMIK XI-C4</p>
+            <h1 class="title">REKAPITULASI<br><em>PRESENSI & TUGAS</em></h1>
+            <p class="description">
+                Sistem informasi terpadu dengan integrasi kehadiran siswa dan pengelolaan data kelas secara real-time.
+            </p>
+            
+            <div class="action-group">
                 <a href="login.html" class="btn-primary" id="btn-portal">
-                <span>MASUK PORTAL</span>
+                    <span>MASUK PORTAL</span>
                 </a>
-                </div>
             </div>
-        </main>
+        </div>
+
+        <div class="footer-note" style="font-size: 0.65rem; color: rgba(255,255,255,0.4); letter-spacing: 0.1em;">
+            SMAK St. Louis 1 Surabaya - XIC4 &copy; 2026
+        </div>
+
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="main.js"></script>
 </body>
 </html>
