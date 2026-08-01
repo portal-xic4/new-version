@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #08080a; /* Dark Obsidian */
+    color: #e5e5e7;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* --- TAMBAHAN UNTUK VIDEO BACKGROUND --- */
+.video-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(8, 8, 10, 0.7);
+    backdrop-filter: blur(2px);
+    z-index: 0;
+}
+
+/* Canvas Melayang di Latar Belakang */
+#webgl-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Di atas video, di bawah teks */
+    pointer-events: none; /* Agar tidak menghalangi klik mouse */
+}
+
+/* Overlay Konten Teks */
+.viewport {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem 5%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Cinzel', serif;
+    font-size: 1.25rem;
+    letter-spacing: 0.3em;
+    font-weight: 700;
+    color: #fff;
+}
+
+.status-badge {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: #8a8a93;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+}
+
+.hero {
+    max-width: 650px;
+}
+
+.subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    color: #9d8b70; /* Muted Gold */
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.1;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    color: #f0f0f3;
+}
+
+.title em {
+    font-style: italic;
+    font-weight: 300;
+    color: #b8b8c0;
+}
+
+.description {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: #8a8a93;
+    margin-bottom: 2.5rem;
+    max-width: 480px;
+}
+
+.btn-primary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 1.2rem 2.5rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    position: relative;
+    overflow: hidden;
+
+    /* TAMBAHKAN 2 BARIS INI UNTUK MENGHILANGKAN GARIS BAWAH */
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}

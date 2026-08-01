@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kas Kelas - Kelas C4</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelas C4</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans pb-12">
+
+  <nav class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Kelas C4</h1>
+      <div class="space-x-4 text-sm font-medium">
+        <a href="index.html" class="hover:underline">Beranda</a>
+        <a href="jadwal.html" class="hover:underline">Jadwal</a>
+        <a href="piket.html" class="hover:underline">Piket</a>
+        <a href="tugas.html" class="hover:underline">Tugas</a>
+        <a href="absensi.html" class="hover:underline">Absensi</a>
+        <a href="kas.html" class="underline font-bold">Kas Kelas</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mx-auto p-4 md:p-6 max-w-6xl space-y-6">
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <p class="text-xs font-semibold text-slate-500 uppercase">Total Pemasukan</p>
+        <p id="totalMasuk" class="text-2xl font-bold text-emerald-600 mt-1">Rp 0</p>
+      </div>
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+        <p class="text-xs font-semibold text-slate-500 uppercase">Total Pengeluaran</p>
+        <p id="totalKeluar" class="text-2xl font-bold text-rose-600 mt-1">Rp 0</p>
+      </div>
+      <div class="bg-indigo-600 text-white p-5 rounded-xl shadow-sm">
+        <p class="text-xs font-semibold uppercase text-indigo-100">Sisa Saldo Kas</p>
+        <p id="sisaSaldo" class="text-2xl font-bold mt-1">Rp 0</p>
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center">
+      <h2 class="text-xl font-bold text-slate-900">Laporan & Pencatatan Kas</h2>
+      <div class="space-x-2">
+        <button onclick="toggleElement('formPemasukan')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-3 py-2 rounded-lg font-medium transition">
+          + Catat Pembayaran Siswa
+        </button>
+        <button onclick="toggleElement('formPengeluaran')" class="bg-rose-600 hover:bg-rose-700 text-white text-xs px-3 py-2 rounded-lg font-medium transition">
+          - Catat Pengeluaran & Nota
+        </button>
+      </div>
+    </div>
+
+    <div id="formPemasukan" class="hidden bg-emerald-50 border border-emerald-200 p-5 rounded-xl shadow-sm space-y-3">
+      <h3 class="font-bold text-emerald-950 text-sm">Input Pembayaran Kas Siswa</h3>
+      <form id="formBayarKas" class="grid grid-cols-1 md:grid-cols-6 gap-3">
+        
+        <select id="selectSiswaKas" class="p-2.5 rounded-lg border border-slate-300 text-sm bg-white md:col-span-2" required>
+          <option value="">-- Pilih Nama Siswa --</option>
+        </select>
+
+        <select id="selectOpsiBayar" class="p-2.5 rounded-lg border border-slate-300 text-sm bg-white md:col-span-2" required>
+          <option value="1">Bayar 1 Bulan</option>
+          <option value="multi">Bayar Lebih dari 1 Bulan (Rentang)</option>
+        </select>
+
+        <div id="wrapperSatuBulan" class="md:col-span-2">
+          <select id="selectBulanTunggal" class="w-full p-2.5 rounded-lg border border-slate-300 text-sm bg-white">
+            <option value="">-- Pilih Bulan --</option>
+          </select>
+        </div>
+
+        <div id="wrapperRentangBulan" class="hidden md:col-span-2 grid grid-cols-2 gap-2">
+          <select id="selectBulanAwal" class="p-2.5 rounded-lg border border-slate-300 text-sm bg-white">
+            <option value="">-- Dari Bulan --</option>
+          </select>
+          <select id="selectBulanAkhir" class="p-2.5 rounded-lg border border-slate-300 text-sm bg-white">
+            <option value="">-- Sampai Bulan --</option>
+          </select>
+        </div>
+
+        <input type="number" id="inputNominal" placeholder="Total Bayar (Rp)" class="p-2.5 rounded-lg border border-slate-300 text-sm bg-white md:col-span-4" required min="1000">
+        
+        <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg text-sm transition py-2.5 md:col-span-2">
+          Simpan Pembayaran
+        </button>
+      </form>
+      <p id="infoPeriode" class="text-xs text-emerald-800 font-medium italic"></p>
+    </div>
+
+    <div id="formPengeluaran" class="hidden bg-rose-50 border border-rose-200 p-5 rounded-xl shadow-sm space-y-3">
+      <h3 class="font-bold text-rose-950 text-sm">Input Pengeluaran Kas Kelas & Nota</h3>
+      <form id="formKeluarKas" class="grid grid-cols-1 md:grid-cols-4 gap-3">
+        <input type="date" id="tglKeluar" class="p-2.5 rounded-lg border border-slate-300 text-sm bg-white" required>
+        <input type="text" id="keteranganKeluar" placeholder="Keterangan (ex: Beli Spidol, Taplak)" class="p-2.5 rounded-lg border border-slate-300 text-sm" required>
+        <input type="number" id="nominalKeluar" placeholder="Jumlah (Rp)" class="p-2.5 rounded-lg border border-slate-300 text-sm" required>
+        <input type="text" id="linkNota" placeholder="Link Gambar Nota (Google Drive/Imgur)" class="p-2.5 rounded-lg border border-slate-300 text-sm bg-white">
+        <button type="submit" class="md:col-span-4 bg-rose-600 hover:bg-rose-700 text-white font-semibold py-2.5 rounded-lg text-sm transition">
+          Catat Pengeluaran
+        </button>
+      </form>
+    </div>
+
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-3">
+      <h3 class="font-bold text-slate-800 text-base">Status Pembayaran Kas Siswa (Juli 2026 - Juni 2027)</h3>
+      <p class="text-xs text-slate-500">• Standar Lunas: <span class="font-bold text-emerald-600">Rp 30.000 / bulan</span>. Status otomatis terupdate.</p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 border-b">
+              <th class="p-2.5 border">No</th>
+              <th class="p-2.5 border min-w-[180px]">Nama Siswa</th>
+              <th class="p-2.5 border text-center">Jul 26</th>
+              <th class="p-2.5 border text-center">Agu 26</th>
+              <th class="p-2.5 border text-center">Sep 26</th>
+              <th class="p-2.5 border text-center">Okt 26</th>
+              <th class="p-2.5 border text-center">Nov 26</th>
+              <th class="p-2.5 border text-center">Des 26</th>
+              <th class="p-2.5 border text-center">Jan 27</th>
+              <th class="p-2.5 border text-center">Feb 27</th>
+              <th class="p-2.5 border text-center">Mar 27</th>
+              <th class="p-2.5 border text-center">Apr 27</th>
+              <th class="p-2.5 border text-center">Mei 27</th>
+              <th class="p-2.5 border text-center">Jun 27</th>
+            </tr>
+          </thead>
+          <tbody id="tabelRekapKas" class="divide-y text-slate-700"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-3">
+      <h3 class="font-bold text-slate-800 text-base">Riwayat Pengeluaran & Bukti Nota</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-slate-100 text-slate-600 uppercase">
+            <tr>
+              <th class="p-2.5">Tanggal</th>
+              <th class="p-2.5">Keterangan</th>
+              <th class="p-2.5">Nominal</th>
+              <th class="p-2.5">Bukti Nota</th>
+              <th class="p-2.5 text-center">Aksi Edit/Hapus</th>
+            </tr>
+          </thead>
+          <tbody id="tabelPengeluaran" class="divide-y text-slate-700">
+            <tr>
+              <td colspan="5" class="p-4 text-center italic text-slate-400">Belum ada pengeluaran dicatat.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="pt-4 border-t border-slate-200 text-center">
+      <button onclick="toggleElement('areaRiwayatPemasukan')" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-sm transition">
+        Tampilkan / Menyembunyikan Riwayat Pembayaran Siswa
+      </button>
+    </div>
+
+    <div id="areaRiwayatPemasukan" class="hidden">
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 space-y-3">
+        <h3 class="font-bold text-slate-800 text-base">Riwayat Transaksi Pembayaran Siswa</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 text-slate-600 uppercase">
+              <tr>
+                <th class="p-2.5">Siswa</th>
+                <th class="p-2.5">Bulan</th>
+                <th class="p-2.5">Nominal</th>
+                <th class="p-2.5 text-center">Aksi Edit/Hapus</th>
+              </tr>
+            </thead>
+            <tbody id="tabelRiwayatPemasukan" class="divide-y text-slate-700">
+              <tr>
+                <td colspan="4" class="p-4 text-center italic text-slate-400">Belum ada riwayat pembayaran.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function toggleElement(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle('hidden');
+    }
+  </script>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const daftarSiswa = [
+      "Agatha Clara Muljono", "Aileen Clarabelle Pranowo", "Alyssa Aurelia Margono", "Andrea Marie Kwesal",
+      "Beatrice Agatha Wibowo", "Edward Miryason Perdana", "Eileen Jessica Chandra Tjio", "Elisabeth Annabelle Halim",
+      "Gabriel Davion Tjakra", "Giovanni Kevin Pranata", "Grace Elaine Thobias", "Jane Clara",
+      "Jayden Yang Raharjo", "Jesslyn Adelina Sidharto", "Jonathan Agatha Putra", "Jonathan Lyonell Tjandra",
+      "Joyce Quinn Oei", "Julia Rosari Kurnia", "Justin Denzel Darmawan", "Keane Harsoyo",
+      "Lim Felix Christian", "Lionel Christensen Wijaya", "Louise Kevin Widjaja", "Maria Yuliana Lie",
+      "Marlowe James Christianto", "Nadyenka Naeva Tandiabang", "Nathaniel Nelson Jonathan", "Nicholas Kristian Sutanto",
+      "Peter Gani Tandio", "Rafael Avelino", "Raphael Jonathan Yeung", "Roland Sugiharto",
+      "Valishia Sabrina Kusuma", "Vincentius Danny Adrianto Tejo"
+    ];
+
+    const bulanList = [
+      "Juli 2026", "Agustus 2026", "September 2026", "Oktober 2026", "November 2026", "Desember 2026",
+      "Januari 2027", "Februari 2027", "Maret 2027", "April 2027", "Mei 2027", "Juni 2027"
+    ];
+
+    // Populate Dropdown Siswa
+    const selectSiswaKas = document.getElementById("selectSiswaKas");
+    daftarSiswa.forEach((nama, i) => {
+      const opt = document.createElement("option");
+      opt.value = nama;
+      opt.textContent = `${i + 1}. ${nama}`;
+      selectSiswaKas.appendChild(opt);
+    });
+
+    // Populate Dropdown Bulan (Tunggal, Awal, dan Akhir)
+    const selectBulanTunggal = document.getElementById("selectBulanTunggal");
+    const selectBulanAwal = document.getElementById("selectBulanAwal");
+    const selectBulanAkhir = document.getElementById("selectBulanAkhir");
+
+    bulanList.forEach((bln, idx) => {
+      const optTunggal = document.createElement("option");
+      optTunggal.value = idx;
+      optTunggal.textContent = bln;
+      selectBulanTunggal.appendChild(optTunggal);
+
+      const opt1 = document.createElement("option");
+      opt1.value = idx;
+      opt1.textContent = bln;
+      selectBulanAwal.appendChild(opt1);
+
+      const opt2 = document.createElement("option");
+      opt2.value = idx;
+      opt2.textContent = bln;
+      selectBulanAkhir.appendChild(opt2);
+    });
+
+    // Toggle Mode Pembayaran (1 Bulan / Rentang Bulan)
+    const selectOpsiBayar = document.getElementById("selectOpsiBayar");
+    const wrapperSatuBulan = document.getElementById("wrapperSatuBulan");
+    const wrapperRentangBulan = document.getElementById("wrapperRentangBulan");
+
+    selectOpsiBayar.addEventListener("change", () => {
+      if (selectOpsiBayar.value === "1") {
+        wrapperSatuBulan.classList.remove("hidden");
+        wrapperRentangBulan.classList.add("hidden");
+      } else {
+        wrapperSatuBulan.classList.add("hidden");
+        wrapperRentangBulan.classList.remove("hidden");
+      }
+      hitungOtamatisNominal();
+    });
+
+    // Kalkulasi Nominal Otomatis Bertahap
+    function hitungOtamatisNominal() {
+      const mode = selectOpsiBayar.value;
+      const inputNominal = document.getElementById("inputNominal");
+      const infoPeriode = document.getElementById("infoPeriode");
+
+      if (mode === "1") {
+        const idxTunggal = parseInt(selectBulanTunggal.value);
+        if (!isNaN(idxTunggal)) {
+          inputNominal.value = 30000;
+          infoPeriode.textContent = `Membayar 1 bulan (${bulanList[idxTunggal]}) = Rp 30.000`;
+          infoPeriode.className = "text-xs text-emerald-800 font-medium italic";
+        } else {
+          inputNominal.value = "";
+          infoPeriode.textContent = "";
+        }
+      } else {
+        const idxAwal = parseInt(selectBulanAwal.value);
+        const idxAkhir = parseInt(selectBulanAkhir.value);
+
+        if (!isNaN(idxAwal) && !isNaN(idxAkhir)) {
+          if (idxAkhir < idxAwal) {
+            infoPeriode.textContent = "Bulan akhir tidak boleh lebih awal dari bulan awal!";
+            infoPeriode.className = "text-xs text-rose-600 font-medium";
+            inputNominal.value = "";
+            return;
+          }
+
+          const jumlahBulan = (idxAkhir - idxAwal) + 1;
+          const totalNominal = jumlahBulan * 30000;
+          inputNominal.value = totalNominal;
+
+          infoPeriode.textContent = `Menghitung ${jumlahBulan} bulan (${bulanList[idxAwal]} s/d ${bulanList[idxAkhir]}) = Rp ${totalNominal.toLocaleString('id-ID')}`;
+          infoPeriode.className = "text-xs text-emerald-800 font-medium italic";
+        }
+      }
+    }
+
+    selectBulanTunggal.addEventListener("change", hitungOtamatisNominal);
+    selectBulanAwal.addEventListener("change", hitungOtamatisNominal);
+    selectBulanAkhir.addEventListener("change", hitungOtamatisNominal);
+
+    // Simpan Pembayaran Kas (Mendukung 1 Bulan & Rentang Bulan)
+    document.getElementById("formBayarKas").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const nama = selectSiswaKas.value;
+      const mode = selectOpsiBayar.value;
+      const totalNominalInput = parseInt(document.getElementById("inputNominal").value);
+      let rentangBulan = [];
+
+      if (mode === "1") {
+        const idx = parseInt(selectBulanTunggal.value);
+        if (isNaN(idx)) {
+          alert("Silakan pilih bulan pembayaran!");
+          return;
+        }
+        rentangBulan.push(bulanList[idx]);
+      } else {
+        const idxAwal = parseInt(selectBulanAwal.value);
+        const idxAkhir = parseInt(selectBulanAkhir.value);
+
+        if (isNaN(idxAwal) || isNaN(idxAkhir) || idxAkhir < idxAwal) {
+          alert("Pilihan rentang bulan tidak valid!");
+          return;
+        }
+        rentangBulan = bulanList.slice(idxAwal, idxAkhir + 1);
+      }
+
+      const nominalPerBulan = Math.floor(totalNominalInput / rentangBulan.length);
+
+      try {
+        for (const bln of rentangBulan) {
+          await addDoc(collection(db, "pemasukan_kas"), {
+            nama,
+            bulan: bln,
+            nominal: nominalPerBulan,
+            timestamp: new Date()
+          });
+        }
+
+        alert(`Berhasil! Pembayaran kas untuk ${nama} (${rentangBulan.join(", ")}) telah tersimpan!`);
+        document.getElementById("formBayarKas").reset();
+        
+        // Reset tampilan ke mode bawaan (1 bulan)
+        selectOpsiBayar.value = "1";
+        wrapperSatuBulan.classList.remove("hidden");
+        wrapperRentangBulan.classList.add("hidden");
+        document.getElementById("infoPeriode").textContent = "";
+
+      } catch (err) {
+        alert("Gagal menyimpan data: " + err.message);
+      }
+    });
+
+    // Simpan Pengeluaran
+    document.getElementById("formKeluarKas").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const tanggal = document.getElementById("tglKeluar").value;
+      const keterangan = document.getElementById("keteranganKeluar").value;
+      const nominal = parseInt(document.getElementById("nominalKeluar").value);
+      const nota = document.getElementById("linkNota").value;
+
+      try {
+        await addDoc(collection(db, "pengeluaran_kas"), { tanggal, keterangan, nominal, nota, timestamp: new Date() });
+        alert("Pengeluaran berhasil dicatat!");
+        document.getElementById("formKeluarKas").reset();
+      } catch (err) { alert("Gagal mencatat pengeluaran: " + err.message); }
+    });
+
+    // Realtime Pemasukan
+    let dataPemasukan = [];
+    let totalPemasukanNominal = 0;
+
+    onSnapshot(collection(db, "pemasukan_kas"), (snapshot) => {
+      dataPemasukan = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      totalPemasukanNominal = dataPemasukan.reduce((acc, curr) => acc + (curr.nominal || 0), 0);
+      document.getElementById("totalMasuk").textContent = `Rp ${totalPemasukanNominal.toLocaleString("id-ID")}`;
+      
+      renderTabelRekap();
+      renderTabelRiwayatPemasukan(snapshot.docs);
+      updateSaldo();
+    });
+
+    function renderTabelRiwayatPemasukan(docs) {
+      const tbody = document.getElementById("tabelRiwayatPemasukan");
+      tbody.innerHTML = "";
+
+      if (docs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center italic text-slate-400">Belum ada riwayat pembayaran.</td></tr>';
+        return;
+      }
+
+      docs.forEach(docSnap => {
+        const d = docSnap.data();
+        const id = docSnap.id;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="p-2.5 font-semibold text-slate-800">${d.nama}</td>
+          <td class="p-2.5 font-mono text-slate-500">${d.bulan}</td>
+          <td class="p-2.5 font-bold text-emerald-600">Rp ${Number(d.nominal).toLocaleString('id-ID')}</td>
+          <td class="p-2.5 text-center space-x-1">
+            <button onclick="editPemasukan('${id}', '${d.nama}', ${d.nominal})" class="bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold px-2.5 py-1 rounded transition">Edit</button>
+            <button onclick="hapusPemasukan('${id}')" class="bg-rose-500 hover:bg-rose-600 text-white text-[10px] font-bold px-2.5 py-1 rounded transition">Hapus</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    window.editPemasukan = async (id, nama, nominalLama) => {
+      const nominalBaru = prompt(`Ubah nominal kas untuk ${nama}:`, nominalLama);
+      if (nominalBaru !== null && nominalBaru !== "") {
+        try {
+          await updateDoc(doc(db, "pemasukan_kas", id), { nominal: Number(nominalBaru) });
+          alert("Nominal berhasil diperbarui!");
+        } catch (err) { alert("Gagal mengedit: " + err.message); }
+      }
+    };
+
+    window.hapusPemasukan = async (id) => {
+      if (confirm("Yakin ingin menghapus transaksi pembayaran ini?")) {
+        try {
+          await deleteDoc(doc(db, "pemasukan_kas", id));
+          alert("Data transaksi berhasil dihapus!");
+        } catch (err) { alert("Gagal menghapus: " + err.message); }
+      }
+    };
+
+    // Realtime Listener Pengeluaran
+    let totalPengeluaranNominal = 0;
+    onSnapshot(collection(db, "pengeluaran_kas"), (snapshot) => {
+      const tbody = document.getElementById("tabelPengeluaran");
+      tbody.innerHTML = "";
+      totalPengeluaranNominal = 0;
+
+      if (snapshot.empty) {
+        tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center italic text-slate-400">Belum ada pengeluaran dicatat.</td></tr>';
+      } else {
+        snapshot.docs.forEach(docSnap => {
+          const d = docSnap.data();
+          const id = docSnap.id;
+          totalPengeluaranNominal += (d.nominal || 0);
+          
+          const tr = document.createElement("tr");
+          const notaHtml = d.nota 
+            ? `<a href="${d.nota}" target="_blank" class="text-indigo-600 underline font-semibold">Lihat Nota</a>` 
+            : '<span class="text-slate-400">-</span>';
+
+          tr.innerHTML = `
+            <td class="p-2.5 font-medium">${d.tanggal}</td>
+            <td class="p-2.5 font-semibold">${d.keterangan}</td>
+            <td class="p-2.5 text-rose-600 font-bold">Rp ${Number(d.nominal).toLocaleString("id-ID")}</td>
+            <td class="p-2.5">${notaHtml}</td>
+            <td class="p-2.5 text-center space-x-1">
+              <button onclick="editPengeluaran('${id}', '${d.keterangan}', ${d.nominal}, '${d.nota || ''}')" class="bg-amber-500 hover:bg-amber-600 text-white text-[10px] font-bold px-2.5 py-1 rounded transition">Edit</button>
+              <button onclick="hapusPengeluaran('${id}')" class="bg-rose-500 hover:bg-rose-600 text-white text-[10px] font-bold px-2.5 py-1 rounded transition">Hapus</button>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+      document.getElementById("totalKeluar").textContent = `Rp ${totalPengeluaranNominal.toLocaleString("id-ID")}`;
+      updateSaldo();
+    });
+
+    // Fungsi Edit Pengeluaran
+    window.editPengeluaran = async (id, ketLama, nominalLama, notaLama) => {
+      const ketBaru = prompt("Ubah keterangan pengeluaran:", ketLama);
+      if (ketBaru === null) return;
+
+      const nominalBaru = prompt("Ubah nominal pengeluaran (Rp):", nominalLama);
+      if (nominalBaru === null) return;
+
+      const notaBaru = prompt("Ubah link nota (opsional):", notaLama);
+
+      try {
+        await updateDoc(doc(db, "pengeluaran_kas", id), {
+          keterangan: ketBaru,
+          nominal: Number(nominalBaru),
+          nota: notaBaru
+        });
+        alert("Pengeluaran berhasil diperbarui!");
+      } catch (err) {
+        alert("Gagal mengedit pengeluaran: " + err.message);
+      }
+    };
+
+    // Fungsi Hapus Pengeluaran
+    window.hapusPengeluaran = async (id) => {
+      if (confirm("Yakin ingin menghapus catatan pengeluaran ini? Sisa saldo akan otomatis dihitung ulang.")) {
+        try {
+          await deleteDoc(doc(db, "pengeluaran_kas", id));
+          alert("Catatan pengeluaran berhasil dihapus!");
+        } catch (err) {
+          alert("Gagal menghapus pengeluaran: " + err.message);
+        }
+      }
+    };
+
+    // Render Tabel Rekap
+    function renderTabelRekap() {
+      const tbody = document.getElementById("tabelRekapKas");
+      tbody.innerHTML = "";
+
+      daftarSiswa.forEach((nama, idx) => {
+        const tr = document.createElement("tr");
+        let htmlBulan = "";
+
+        bulanList.forEach(bln => {
+          const totalBayarBulan = dataPemasukan
+            .filter(p => p.nama === nama && p.bulan === bln)
+            .reduce((sum, item) => sum + item.nominal, 0);
+
+          if (totalBayarBulan >= 30000) {
+            htmlBulan += `<td class="p-2 border text-center font-bold text-emerald-600 bg-emerald-50/50" title="Lunas: Rp ${totalBayarBulan.toLocaleString()}">✓</td>`;
+          } else if (totalBayarBulan > 0) {
+            htmlBulan += `<td class="p-2 border text-center font-bold text-amber-600 bg-amber-50/50" title="Kurang: Rp ${totalBayarBulan.toLocaleString()}">!</td>`;
+          } else {
+            htmlBulan += `<td class="p-2 border text-center text-slate-300">-</td>`;
+          }
+        });
+
+        tr.innerHTML = `
+          <td class="p-2 border font-medium text-center">${idx + 1}</td>
+          <td class="p-2 border font-semibold text-slate-800">${nama}</td>
+          ${htmlBulan}
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateSaldo() {
+      const sisa = totalPemasukanNominal - totalPengeluaranNominal;
+      document.getElementById("sisaSaldo").textContent = `Rp ${sisa.toLocaleString("id-ID")}`;
+    }
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('PWA Service Worker terdaftar!', reg))
+          .catch((err) => console.error('PWA Gagal terdaftar:', err));
+      });
+    }
+  </script>
+</body>
+</html>

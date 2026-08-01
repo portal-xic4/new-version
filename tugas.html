@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tugas & Ulangan - Kelas C4</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelas C4</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans pb-12">
+
+  <nav class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Kelas C4</h1>
+      <div class="space-x-4 text-sm font-medium">
+        <a href="index.html" class="hover:underline">Beranda</a>
+        <a href="jadwal.html" class="hover:underline">Jadwal</a>
+        <a href="piket.html" class="hover:underline">Piket</a>
+        <a href="tugas.html" class="underline font-bold">Tugas</a>
+        <a href="absensi.html" class="hover:underline">Absensi</a>
+        <a href="kas.html" class="hover:underline">Kas Kelas</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mx-auto p-4 md:p-6 space-y-6 max-w-4xl">
+    
+    <div class="flex flex-wrap justify-between items-center gap-4">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+          <span>📝</span> Daftar Tugas & Ulangan
+        </h2>
+        <p class="text-xs text-slate-500 mt-1">Update otomatis dari database kelas</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="btnAdmin" class="text-xs bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center gap-1">
+          ➕ Tambah Tugas Baru
+        </button>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 border-b border-slate-200 pb-2 overflow-x-auto text-xs font-semibold">
+      <button onclick="setFilter('semua')" id="tab-semua" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition">
+        Semua
+      </button>
+      <button onclick="setFilter('aktif')" id="tab-aktif" class="px-3 py-1.5 rounded-lg bg-white border text-slate-600 hover:bg-slate-100 transition">
+        ⏳ Belum Selesai
+      </button>
+      <button onclick="setFilter('ditunda')" id="tab-ditunda" class="px-3 py-1.5 rounded-lg bg-white border text-slate-600 hover:bg-slate-100 transition">
+        🟡 Ditunda
+      </button>
+      <button onclick="setFilter('selesai')" id="tab-selesai" class="px-3 py-1.5 rounded-lg bg-white border text-slate-600 hover:bg-slate-100 transition">
+        ✅ Selesai
+      </button>
+    </div>
+
+    <div id="panelFormAdmin" class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hidden space-y-4">
+      <h3 class="text-md font-bold text-slate-800 border-b pb-2">➕ Tambah Tugas / Ulangan Baru</h3>
+      <form id="formTugas" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Kategori</label>
+          <select id="kategori" class="w-full p-2.5 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500 bg-white" required>
+            <option value="Tugas Mandiri">Tugas Mandiri</option>
+            <option value="Tugas Kelompok">Tugas Kelompok</option>
+            <option value="Ulangan Harian">Ulangan Harian</option>
+            <option value="PR">PR</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Mata Pelajaran</label>
+          <input type="text" id="mapel" placeholder="Contoh: KIMIA, FISIKA, MAT" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500" required>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Deskripsi Tugas</label>
+          <input type="text" id="deskripsi" placeholder="Contoh: BKS hal 10 (no. 1, 3, 5)" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500" required>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Batas Pengumpulan</label>
+          <input type="text" id="deadline" placeholder="Contoh: Jumat, 24 Juli 2026, 10.40 WIB" class="w-full p-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500" required>
+        </div>
+
+        <div class="md:col-span-2">
+          <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg text-sm transition">
+            Simpan Tugas
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div id="modalEdit" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+      <div class="bg-white rounded-xl shadow-lg border p-6 w-full max-w-lg space-y-4">
+        <div class="flex justify-between items-center border-b pb-2">
+          <h3 class="font-bold text-slate-800">✏️ Edit Tugas / Ulangan</h3>
+          <button onclick="window.tutupModalEdit()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+        </div>
+
+        <form id="formEditTugas" class="space-y-3">
+          <input type="hidden" id="editDocId">
+          <input type="hidden" id="editSourceCollection">
+          
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Kategori</label>
+            <select id="editKategori" class="w-full p-2 border rounded-lg text-sm outline-none bg-white" required>
+              <option value="Tugas Mandiri">Tugas Mandiri</option>
+              <option value="Tugas Kelompok">Tugas Kelompok</option>
+              <option value="Ulangan Harian">Ulangan Harian</option>
+              <option value="PR">PR</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Mata Pelajaran</label>
+            <input type="text" id="editMapel" class="w-full p-2 border rounded-lg text-sm outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Deskripsi Tugas</label>
+            <input type="text" id="editDeskripsi" class="w-full p-2 border rounded-lg text-sm outline-none" required>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Batas Pengumpulan</label>
+            <input type="text" id="editDeadline" class="w-full p-2 border rounded-lg text-sm outline-none" required>
+          </div>
+
+          <div class="flex justify-end gap-2 pt-2 border-t">
+            <button type="button" onclick="window.tutupModalEdit()" class="px-4 py-2 text-xs font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg">Batal</button>
+            <button type="submit" class="px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="containerTugas" class="space-y-4">
+      <div class="text-center py-8 text-slate-400 italic">Memuat daftar tugas...</div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    const containerTugas = document.getElementById("containerTugas");
+    const panelFormAdmin = document.getElementById("panelFormAdmin");
+    const btnAdmin = document.getElementById("btnAdmin");
+    const formTugas = document.getElementById("formTugas");
+    const modalEdit = document.getElementById("modalEdit");
+    const formEditTugas = document.getElementById("formEditTugas");
+
+    let isFormOpen = false;
+    let currentFilter = "semua";
+    let cacheTugasPrimary = [];
+    let cacheTugasFallback = [];
+
+    // Filter Trigger
+    window.setFilter = (filter) => {
+      currentFilter = filter;
+      ["semua", "aktif", "ditunda", "selesai"].forEach(f => {
+        const btn = document.getElementById(`tab-${f}`);
+        if (f === filter) {
+          btn.className = "px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-lg bg-white border text-slate-600 hover:bg-slate-100 transition";
+        }
+      });
+      renderAllTugas();
+    };
+
+    // Toggle Panel Form Tambah Tugas
+    btnAdmin.addEventListener("click", () => {
+      isFormOpen = !isFormOpen;
+      if (isFormOpen) {
+        panelFormAdmin.classList.remove("hidden");
+        btnAdmin.textContent = "✖️ Tutup Form";
+        btnAdmin.className = "text-xs bg-rose-600 hover:bg-rose-700 text-white font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center gap-1";
+      } else {
+        panelFormAdmin.classList.add("hidden");
+        btnAdmin.textContent = "➕ Tambah Tugas Baru";
+        btnAdmin.className = "text-xs bg-slate-800 hover:bg-slate-900 text-white font-semibold px-3.5 py-2 rounded-lg shadow-sm transition flex items-center gap-1";
+      }
+    });
+
+    // Simpan Tugas Baru
+    formTugas.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      try {
+        await addDoc(collection(db, "tugas"), {
+          kategori: document.getElementById("kategori").value,
+          mapel: document.getElementById("mapel").value.toUpperCase(),
+          deskripsi: document.getElementById("deskripsi").value,
+          deadline: document.getElementById("deadline").value,
+          status: "aktif",
+          createdAt: new Date()
+        });
+        alert("Tugas berhasil ditambahkan!");
+        formTugas.reset();
+      } catch (err) {
+        console.error("Gagal simpan tugas: ", err);
+      }
+    });
+
+    // Update Tugas dari Modal Edit
+    formEditTugas.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = document.getElementById("editDocId").value;
+      const collName = document.getElementById("editSourceCollection").value || "tugas";
+      try {
+        await updateDoc(doc(db, collName, id), {
+          kategori: document.getElementById("editKategori").value,
+          mapel: document.getElementById("editMapel").value.toUpperCase(),
+          deskripsi: document.getElementById("editDeskripsi").value,
+          deadline: document.getElementById("editDeadline").value
+        });
+        alert("Perubahan tugas berhasil disimpan!");
+        window.tutupModalEdit();
+      } catch (err) {
+        console.error("Gagal update tugas: ", err);
+        alert("Gagal memperbarui tugas!");
+      }
+    });
+
+    // Gabungkan & Render Semua Data
+    function renderAllTugas() {
+      const allList = [...cacheTugasPrimary, ...cacheTugasFallback];
+      const uniqueList = Array.from(new Map(allList.map(item => [item.id, item])).values());
+
+      uniqueList.sort((a, b) => {
+        const tA = a.data.createdAt ? (a.data.createdAt.toDate ? a.data.createdAt.toDate() : new Date(a.data.createdAt)) : 0;
+        const tB = b.data.createdAt ? (b.data.createdAt.toDate ? b.data.createdAt.toDate() : new Date(b.data.createdAt)) : 0;
+        return tB - tA;
+      });
+
+      renderTugas(uniqueList);
+    }
+
+    function renderTugas(list) {
+      containerTugas.innerHTML = "";
+
+      let filteredList = list.filter(item => {
+        const status = item.data.status || (item.data.isFinished ? "selesai" : "aktif");
+        if (currentFilter === "semua") return true;
+        return status === currentFilter;
+      });
+
+      if (filteredList.length === 0) {
+        containerTugas.innerHTML = `
+          <div class="bg-white p-8 rounded-xl border border-slate-200 text-center italic text-slate-400">
+            Tidak ada tugas untuk kategori ini.
+          </div>
+        `;
+        return;
+      }
+
+      filteredList.forEach(item => {
+        const data = item.data;
+        const id = item.id;
+        const collName = item.collName;
+        const status = data.status || (data.isFinished ? "selesai" : "aktif");
+
+        let borderStyle = "border-slate-200 hover:border-slate-300";
+        let statusBadge = "";
+        let lineThrough = "";
+
+        if (status === "selesai") {
+          borderStyle = "bg-slate-50 border-emerald-200";
+          statusBadge = `<span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-md">✅ SELESAI</span>`;
+          lineThrough = "line-through text-slate-400";
+        } else if (status === "ditunda") {
+          borderStyle = "bg-amber-50/50 border-amber-200";
+          statusBadge = `<span class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-0.5 rounded-md">🟡 DITUNDA</span>`;
+        }
+
+        const card = document.createElement("div");
+        card.className = `bg-white p-5 rounded-xl border transition shadow-sm ${borderStyle}`;
+
+        card.innerHTML = `
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div class="space-y-2 flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="bg-indigo-50 text-indigo-700 text-xs font-bold px-2.5 py-1 rounded-md border border-indigo-100">
+                  ${data.kategori || 'Tugas'}
+                </span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                  ${data.mapel || ''}
+                </span>
+                ${statusBadge}
+              </div>
+
+              <h3 class="text-md font-bold ${lineThrough} text-slate-900">
+                ${data.deskripsi || data.judul || ''}
+              </h3>
+
+              <div class="flex items-center gap-1 text-xs text-rose-500 font-medium">
+                <span>⏰</span> Batas Pengumpulan: <span class="font-semibold">${data.deadline || data.batas || '-'}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-wrap">
+              <div class="flex bg-slate-100 p-1 rounded-lg gap-1 border">
+                <button onclick="window.ubahStatusTugas('${id}', '${collName}', 'aktif')" class="px-2 py-1 text-xs font-semibold rounded ${status === 'aktif' ? 'bg-white shadow text-indigo-600' : 'text-slate-500 hover:text-slate-800'}">
+                  ⏳ Belum
+                </button>
+                <button onclick="window.ubahStatusTugas('${id}', '${collName}', 'ditunda')" class="px-2 py-1 text-xs font-semibold rounded ${status === 'ditunda' ? 'bg-amber-500 text-white shadow' : 'text-slate-500 hover:text-slate-800'}">
+                  🟡 Ditunda
+                </button>
+                <button onclick="window.ubahStatusTugas('${id}', '${collName}', 'selesai')" class="px-2 py-1 text-xs font-semibold rounded ${status === 'selesai' ? 'bg-emerald-600 text-white shadow' : 'text-slate-500 hover:text-slate-800'}">
+                  ✅ Selesai
+                </button>
+              </div>
+
+              <button onclick="window.bukaModalEdit('${id}', '${collName}', '${data.kategori || 'Tugas Mandiri'}', '${data.mapel || ''}', '${(data.deskripsi || data.judul || '').replace(/'/g, "\\'")}', '${(data.deadline || data.batas || '').replace(/'/g, "\\'")}')" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                ✏️ Edit
+              </button>
+              <button onclick="window.hapusTugas('${id}', '${collName}')" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                🗑️ Hapus
+              </button>
+            </div>
+          </div>
+        `;
+        containerTugas.appendChild(card);
+      });
+    }
+
+    // Realtime Listener
+    onSnapshot(collection(db, "tugas"), (snapshot) => {
+      cacheTugasPrimary = snapshot.docs.map(d => ({ id: d.id, collName: "tugas", data: d.data() }));
+      renderAllTugas();
+    });
+
+    onSnapshot(collection(db, "tugas_kelas"), (snapshot) => {
+      cacheTugasFallback = snapshot.docs.map(d => ({ id: d.id, collName: "tugas_kelas", data: d.data() }));
+      renderAllTugas();
+    });
+
+    // Window Functions
+    window.ubahStatusTugas = async (id, collName, statusBaru) => {
+      try {
+        await updateDoc(doc(db, collName, id), {
+          status: statusBaru,
+          isFinished: statusBaru === "selesai"
+        });
+      } catch (err) {
+        console.error("Gagal ubah status: ", err);
+      }
+    };
+
+    window.bukaModalEdit = (id, collName, kategori, mapel, deskripsi, deadline) => {
+      document.getElementById("editDocId").value = id;
+      document.getElementById("editSourceCollection").value = collName;
+      document.getElementById("editKategori").value = kategori;
+      document.getElementById("editMapel").value = mapel;
+      document.getElementById("editDeskripsi").value = deskripsi;
+      document.getElementById("editDeadline").value = deadline;
+      modalEdit.classList.remove("hidden");
+    };
+
+    window.tutupModalEdit = () => {
+      modalEdit.classList.add("hidden");
+    };
+
+    window.hapusTugas = async (id, collName) => {
+      if (confirm("Apakah Anda yakin ingin menghapus tugas ini?")) {
+        try {
+          await deleteDoc(doc(db, collName, id));
+          alert("Tugas berhasil dihapus!");
+        } catch (err) {
+          console.error("Gagal hapus tugas: ", err);
+        }
+      }
+    };
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('PWA Service Worker terdaftar!', reg))
+          .catch((err) => console.error('PWA Gagal terdaftar:', err));
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal XI-C4 | Cinematic WebGL Experience</title>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <video autoplay loop muted playsinline class="video-bg">
+        <source src="gagak.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay"></div>
+
+    <canvas id="webgl-canvas"></canvas>
+
+    <div class="viewport">
+        <header class="header">
+            <div class="logo">XI C4</div>
+        </header>
+
+        <main class="hero">
+            <div class="hero-content">
+                <p class="subtitle">WEBSITE XI-C4</p>
+                <h1 class="title">REKAPITULASI<br><em>PRESENSI & TUGAS</em></h1>
+                <p class="description">
+                    Semua Informasi Terkait Presensi dan Tugas Siswa.
+                </p>
+                
+                <div class="action-group">
+                <a href="login.html" class="btn-primary" id="btn-portal">
+                <span>MASUK PORTAL</span>
+                </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

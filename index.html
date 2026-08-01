@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda - Kelas XI-C4</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    const isLogged = localStorage.getItem("userLoggedIn");
+    
+    // Jika TIDAK ADA status logged in, langsung alihkan ke login.html
+    if (!isLogged || isLogged !== "true") {
+      window.location.href = "login.html";
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans pb-12">
+  
+  <nav class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-40">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Kelas C4</h1>
+      <div class="space-x-4 text-sm font-medium">
+        <a href="index.html" class="underline font-bold">Beranda</a>
+        <a href="jadwal.html" class="hover:underline">Jadwal</a>
+        <a href="piket.html" class="hover:underline">Piket</a>
+        <a href="tugas.html" class="hover:underline">Tugas</a>
+        <a href="absensi.html" class="hover:underline">Absensi</a>
+        <a href="kas.html" class="hover:underline">Kas Kelas</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mx-auto p-4 md:p-6 max-w-6xl space-y-6">
+    
+    <div class="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white p-6 rounded-2xl shadow-lg flex justify-between items-center flex-wrap gap-4">
+      <div>
+        <span class="bg-indigo-500/50 text-indigo-100 text-xs px-3 py-1 rounded-full font-medium">SMA Katolik St. Louis 1 Surabaya</span>
+        <h2 class="text-2xl md:text-3xl font-extrabold mt-2">Selamat Datang di Kelas XI-C4!</h2>
+      </div>
+      <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-xl border border-white/20 text-center">
+        <p class="text-xs text-indigo-200 font-semibold uppercase">Total Anggota Kelas</p>
+        <p class="text-2xl md:text-3xl font-black">34 Siswa</p>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+      <div class="overflow-hidden rounded-xl flex items-center justify-center bg-slate-100">
+        <img src="foto-kelas-c4.png" 
+             alt="Kebersamaan XI-C4 SMAK St. Louis 1" 
+             class="w-full h-auto object-contain object-center hover:scale-102 transition-transform duration-300">
+      </div>
+      <div class="text-center mt-3">
+        <h2 class="text-md font-bold text-slate-800">XI-C4</h2>
+        <p class="text-xs text-slate-500">SMAK St. Louis 1 Surabaya</p>
+      </div>
+    </div>
+
+    <div class="bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+      <div class="flex justify-between items-center border-b pb-3 flex-wrap gap-2">
+        <div>
+          <span id="labelDetailPelajaran" class="text-xs font-bold text-indigo-600 uppercase tracking-wide">Pelajaran Esok Hari</span>
+          <h3 id="judulHariEsok" class="text-xl font-bold text-slate-900">🗓️ Loading Jadwal...</h3>
+        </div>
+        <a href="jadwal.html" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 underline">Lihat Jadwal Mingguan →</a>
+      </div>
+      
+      <div id="wadahJadwalEsok" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3"></div>
+    </div>
+
+    <div class="space-y-3">
+      <h3 class="text-lg font-bold text-slate-900">Pengurus Inti Kelas C4</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div>
+            <p class="text-xs text-slate-400 font-medium">Ketua Kelas</p>
+            <p class="font-bold text-slate-900 text-sm">Jayden Yang Raharjo</p>
+            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">Absen 13</span>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div>
+            <p class="text-xs text-slate-400 font-medium">Wakil Ketua Kelas</p>
+            <p class="font-bold text-slate-900 text-sm">Valishia Sabrina Kusuma</p>
+            <span class="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">Absen 33</span>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3">
+          <div>
+            <p class="text-xs text-slate-400 font-medium">Sekretaris</p>
+            <p class="font-bold text-slate-900 text-xs">1. Louise Kevin Widjaja (23)</p>
+            <p class="font-bold text-slate-900 text-xs">2. Elisabeth Annabelle Halim (08)</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-3 sm:col-span-2 md:col-span-3">
+          <div>
+            <p class="text-xs text-slate-400 font-medium">Bendahara</p>
+            <p class="font-bold text-slate-900 text-xs">1. Andrea Marie Kwesal (04)</p>
+            <p class="font-bold text-slate-900 text-xs">2. Alyssa Aurelia Margono (03)</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <h3 class="text-lg font-bold text-slate-900">Seksi Organisasi Kelas</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+          <h4 class="font-bold text-indigo-600 text-sm border-b pb-1">🔒 Sie Keamanan</h4>
+          <p class="text-xs"><span class="font-bold text-slate-700">Ketua:</span> Jonathan Agatha Putra</p>
+          <p class="text-xs text-slate-500"><span class="font-medium text-slate-600">Anggota:</span> Nathaniel Nelson J., Justin Denzel D., Nicholas Kristian S., Giovanni Kevin P.</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+          <h4 class="font-bold text-emerald-600 text-sm border-b pb-1">🧹 Sie Kebersihan</h4>
+          <p class="text-xs"><span class="font-bold text-slate-700">Ketua:</span> Nadyenka Naeva Tandiabang</p>
+          <p class="text-xs text-slate-500"><span class="font-medium text-slate-600">Anggota:</span> Lionel Christensen W., Gabriel Davion T., Aileen Clarabelle P., Lim Felix C.</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+          <h4 class="font-bold text-rose-600 text-sm border-b pb-1">⚖️ Sie Ketertiban</h4>
+          <p class="text-xs"><span class="font-bold text-slate-700">Ketua:</span> Edward Miryason Perdana</p>
+          <p class="text-xs text-slate-500"><span class="font-medium text-slate-600">Anggota:</span> Keane Harsoyo, Roland Sugiharto, Peter Gani Tandio, Raphael Jonathan Y.</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+          <h4 class="font-bold text-purple-600 text-sm border-b pb-1">🎨 Sie Keindahan</h4>
+          <p class="text-xs"><span class="font-bold text-slate-700">Ketua:</span> Eileen Jessica Chandra Tjio</p>
+          <p class="text-xs text-slate-500"><span class="font-medium text-slate-600">Anggota:</span> Julia Rosari K., Beatrice Agatha W., Joyce Quinn Oei</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+          <h4 class="font-bold text-amber-600 text-sm border-b pb-1">🤝 Sie Kekeluargaan</h4>
+          <p class="text-xs"><span class="font-bold text-slate-700">Ketua:</span> Maria Yuliana Lie</p>
+          <p class="text-xs text-slate-500"><span class="font-medium text-slate-600">Anggota:</span> Jane Clara, Agatha Clara M., Jesslyn Adelina S., Grace Elaine T.</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-2">
+          <h4 class="font-bold text-sky-600 text-sm border-b pb-1">🙏 Sie Kerohanian</h4>
+          <p class="text-xs"><span class="font-bold text-slate-700">Ketua:</span> Jonathan Lyonell Tjandra</p>
+          <p class="text-xs text-slate-500"><span class="font-medium text-slate-600">Anggota:</span> Vincentius Danny A. T., Marlowe James C., Rafael Avelino</p>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div id="modal-login" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 justify-center items-center p-4">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 space-y-4">
+      <h3 class="text-lg font-bold text-slate-900 border-b pb-2">Login Pengurus Kelas</h3>
+      
+      <div class="space-y-3">
+        <div>
+          <label class="text-xs font-semibold text-slate-600 block mb-1">Email Pengurus</label>
+          <input type="email" id="login-email" placeholder="pengurus@gmail.com" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <div>
+          <label class="text-xs font-semibold text-slate-600 block mb-1">Password</label>
+          <input type="password" id="login-password" placeholder="••••••••" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+      </div>
+      
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="tutupModalLogin()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">Batal</button>
+        <button onclick="prosesLogin()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg transition">Masuk</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      onAuthStateChanged, 
+      signOut 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      addDoc, 
+      doc, 
+      updateDoc, 
+      serverTimestamp, 
+      onSnapshot, 
+      query, 
+      orderBy 
+    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBQy-HNnXOgFW5VV3ZF1HMKySUPN2n7ETs",
+      authDomain: "xi-c4-project.firebaseapp.com",
+      projectId: "xi-c4-project",
+      storageBucket: "xi-c4-project.firebasestorage.app",
+      messagingSenderId: "1052292104269",
+      appId: "1:1052292104269:web:7b678f29be0d117cad5c04",
+      measurementId: "G-RDYWD4VMQX"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUser = null;
+
+    // Monitor Status Login
+    onAuthStateChanged(auth, (user) => {
+      const editFormSection = document.getElementById("edit-kas-section");
+      const loginBtn = document.getElementById("btn-login");
+      const logoutBtn = document.getElementById("btn-logout");
+      const userStatusText = document.getElementById("user-status");
+
+      if (user) {
+        currentUser = user;
+        if (editFormSection) editFormSection.classList.remove("hidden");
+        if (loginBtn) loginBtn.classList.add("hidden");
+        if (logoutBtn) logoutBtn.classList.remove("hidden");
+        if (userStatusText) userStatusText.innerText = `Login: ${user.email} (Pengurus)`;
+      } else {
+        currentUser = null;
+        if (editFormSection) editFormSection.classList.add("hidden");
+        if (loginBtn) loginBtn.classList.remove("hidden");
+        if (logoutBtn) logoutBtn.classList.add("hidden");
+        if (userStatusText) userStatusText.innerText = "Mode: Tamu / Siswa (Hanya Lihat)";
+      }
+    });
+
+    // Pendaftaran Fungsi ke Scope Window (agar bisa dipanggil onclick="")
+    window.bukaModalLogin = () => {
+      const modal = document.getElementById("modal-login");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    };
+
+    window.tutupModalLogin = () => {
+      const modal = document.getElementById("modal-login");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    };
+
+    window.prosesLogin = async () => {
+      const email = document.getElementById("login-email").value;
+      const password = document.getElementById("login-password").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        alert("Login berhasil!");
+        window.tutupModalLogin();
+      } catch (error) {
+        alert("Login gagal: " + error.message);
+      }
+    };
+
+    window.logoutPengurus = async () => {
+      try {
+        await signOut(auth);
+        alert("Berhasil logout!");
+      } catch (error) {
+        alert("Gagal logout: " + error.message);
+      }
+    };
+  </script>
+
+  <script>
+    const jadwalMaster = {
+      Senin: [
+        { jam: "06.25 - 08.00", mapel: "KIMIA" }, { jam: "08.00 - 09.55", mapel: "MATEMATIKA" },
+        { jam: "09.55 - 11.25", mapel: "PJOK" }, { jam: "11.50 - 13.20", mapel: "B. ING" },
+        { jam: "13.20 - 14.50", mapel: "MATEMATIKA" }
+      ],
+      Selasa: [
+        { jam: "06.25 - 07.15", mapel: "BIOLOGI" }, { jam: "07.15 - 08.45", mapel: "MATEMATIKA" },
+        { jam: "09.10 - 10.40", mapel: "B. INDO" }, { jam: "10.40 - 11.25", mapel: "FISIKA" },
+        { jam: "11.50 - 13.20", mapel: "KIMIA" }, { jam: "13.20 - 14.50", mapel: "FISIKA" }
+      ],
+      Rabu: [
+        { jam: "06.25 - 07.15", mapel: "MATEMATIKA" }, { jam: "07.15 - 08.00", mapel: "BIOLOGI" },
+        { jam: "08.00 - 08.45", mapel: "B. ING" }, { jam: "09.10 - 10.40", mapel: "SENBUD" },
+        { jam: "10.40 - 11.25", mapel: "AGAMA" }, { jam: "11.50 - 13.20", mapel: "PPKN" },
+        { jam: "13.20 - 14.05", mapel: "B. INDO" }
+      ],
+      Kamis: [
+        { jam: "06.25 - 08.00", mapel: "MATEMATIKA" }, { jam: "08.00 - 09.55", mapel: "SEJARAH" },
+        { jam: "09.55 - 11.25", mapel: "INFORMATIKA" }, { jam: "11.50 - 13.20", mapel: "MANDARIN" },
+        { jam: "13.20 - 14.05", mapel: "BIOLOGI" }
+      ],
+      Jumat: [
+        { jam: "06.25 - 07.15", mapel: "B. INDO" }, { jam: "07.15 - 08.45", mapel: "AGAMA" },
+        { jam: "09.10 - 10.40", mapel: "FISIKA" }, { jam: "10.40 - 11.25", mapel: "KIMIA" },
+        { jam: "11.50 - 13.20", mapel: "BIOLOGI" }
+      ]
+    };
+
+    const hariIniIndex = new Date().getDay();
+    let hariEsok = "Senin";
+    if (hariIniIndex === 1) hariEsok = "Selasa";
+    else if (hariIniIndex === 2) hariEsok = "Rabu";
+    else if (hariIniIndex === 3) hariEsok = "Kamis";
+    else if (hariIniIndex === 4) hariEsok = "Jumat";
+
+    document.getElementById("judulHariEsok").textContent = `Jadwal Hari ${hariEsok}`;
+    const wadah = document.getElementById("wadahJadwalEsok");
+    wadah.innerHTML = "";
+
+    if (jadwalMaster[hariEsok]) {
+      jadwalMaster[hariEsok].forEach(item => {
+        const box = document.createElement("div");
+        box.className = "bg-indigo-50/60 border border-indigo-100 p-3.5 rounded-xl space-y-1";
+        box.innerHTML = `
+          <span class="text-[10px] font-bold font-mono text-indigo-500 uppercase tracking-wider">${item.jam}</span>
+          <p class="font-bold text-slate-800 text-sm">${item.mapel}</p>
+        `;
+        wadah.appendChild(box);
+      });
+    }
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('PWA Service Worker terdaftar!', reg))
+          .catch((err) => console.error('PWA Gagal terdaftar:', err));
+      });
+    }
+  </script>
+  <script>
+  (function () {
+    // 30 menit = 30 * 60 * 1000 milidetik
+    const TIMEOUT_30_MENIT = 30 * 60 * 1000; 
+    let idleTimer;
+
+    // 1. Fungsi Reset Sesi (Logout)
+    function resetSesiLogin() {
+      // Hapus data sesi dari localStorage
+      localStorage.removeItem("userLoggedIn");
+      
+      alert("Sesi kamu telah berakhir karena tidak ada aktivitas selama 30 menit. Silakan pilih nama kembali.");
+      
+      // Lempar kembali ke halaman login
+      window.location.href = "login.html";
+    }
+
+    // 2. Fungsi Reset Timer Aktivitas
+    function restartTimer() {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(resetSesiLogin, TIMEOUT_30_MENIT);
+    }
+
+    // 3. Cek Status Login
+    const userAktif = localStorage.getItem("userLoggedIn");
+    
+    if (!userAktif) {
+      // Jika belum pilih nama di login.html, langsung arahkan ke login.html
+      window.location.href = "login.html";
+    } else {
+      // Daftar event yang mendeteksi aktivitas pengguna
+      const eventAktivitas = ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'];
+      
+      eventAktivitas.forEach(evt => {
+        window.addEventListener(evt, restartTimer, false);
+      });
+
+      // Jalankan timer saat halaman pertama kali dimuat
+      restartTimer();
+    }
+  })();
+  const user = localStorage.getItem("userLoggedIn");
+  if (user) {
+    console.log("Siswa yang sedang aktif:", user);
+    // Kamu bisa pakai variabel 'user' ini untuk menyapa atau membatasi fitur
+  }
+</script>
+</body>
+</html>

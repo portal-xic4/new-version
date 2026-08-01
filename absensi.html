@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Absensi Praktikum - Kelas C4</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kelas C4</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+
+<body class="bg-slate-50 text-slate-800 font-sans">
+
+  <nav class="bg-indigo-600 text-white p-4 shadow-md sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">Kelas C4</h1>
+      <div class="space-x-4 text-sm font-medium">
+        <a href="index.html" class="hover:underline">Beranda</a>
+        <a href="jadwal.html" class="hover:underline">Jadwal</a>
+        <a href="piket.html" class="hover:underline">Piket</a>
+        <a href="tugas.html" class="hover:underline">Tugas</a>
+        <a href="absensi.html" class="underline font-bold">Absensi</a>
+        <a href="kas.html" class="hover:underline">Kas Kelas</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mx-auto p-4 md:p-6 space-y-6 max-w-6xl">
+    <div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl shadow-sm space-y-3">
+      <div class="flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📢</span>
+          <h3 class="font-bold text-amber-900">Pengingat Jadwal Praktikum Hari Rabu</h3>
+        </div>
+        <button onclick="kirimPengingatWA()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition shadow-sm">
+          <span>💬</span> Bagikan Pengingat ke WA Kelas
+        </button>
+      </div>
+      <p class="text-sm text-amber-800">
+        • <span class="font-semibold">Absen Kecil (No. 1–20):</span> Rabu Minggu Ke-1 & Ke-3 Agustus.<br>
+        • <span class="font-semibold">Absen Besar (No. 21–34):</span> Rabu Minggu Ke-2 & Ke-4 Agustus.
+      </p>
+    </div>
+
+    <script>
+      function kirimPengingatWA() {
+        const pesan = encodeURIComponent(
+          `*📢 PENGINGAT PRAKTIKUM KELAS C4*\n\n` +
+          `Halo teman-teman C4! Mengingatkan kembali untuk jadwal praktikum besok hari Rabu:\n\n` +
+          `🧪 *JADWAL MINGGU INI:*\n` +
+          `• *Absen Kecil (No 1–20)* / *Absen Besar (No 21–34)*\n\n` +
+          `📌 *Catatan:* Wajib membawa jas laboratorium dan peralatan praktikum lengkap.\n` +
+          `Jangan lupa untuk mengisi absensi digital di website kelas setelah berada di lab ya!\n\n` +
+          `Akses website: https://website-c4.vercel.app`
+        );
+
+        window.open(`https://api.whatsapp.com/send?text=${pesan}`, '_blank');
+      }
+    </script>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 md:col-span-1 space-y-4">
+        <h2 class="text-lg font-bold text-slate-900 border-b pb-2">🧪 Form Presensi</h2>
+
+        <form id="formAbsensi" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Pilih Nama Siswa</label>
+            <select id="selectSiswa" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white" required>
+              <option value="">-- Pilih Nama --</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1">Status Kehadiran</label>
+            <select id="selectStatus" class="w-full p-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 outline-none bg-white">
+              <option value="Hadir">✅ Hadir</option>
+              <option value="Izin">✉️ Izin</option>
+              <option value="Sakit">🏥 Sakit</option>
+            </select>
+          </div>
+
+          <button type="submit" id="btnAbsen" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg text-sm transition">
+            Kirim Absensi
+          </button>
+        </form>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 md:col-span-2 space-y-4">
+        <div class="flex flex-wrap justify-between items-center border-b pb-2 gap-2">
+          <div>
+            <h2 id="judulTabel" class="text-lg font-bold text-slate-900">📋 Absensi Hari Ini</h2>
+            <p id="subJudulTabel" class="text-xs text-slate-500">Otomatis direset setiap pergantian hari (24 Jam)</p>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button id="btnToggleArsip" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold px-3 py-1.5 rounded-lg border border-indigo-200 transition flex items-center gap-1">
+              📁 Lihat Arsip
+            </button>
+            <button id="btnToggleEdit" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg border transition flex items-center gap-1">
+              ⚙️ Mode Edit
+            </button>
+          </div>
+        </div>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-100 text-slate-600 text-xs uppercase">
+              <tr>
+                <th class="p-2.5">No</th>
+                <th class="p-2.5">Nama Siswa</th>
+                <th class="p-2.5">Kelompok</th>
+                <th class="p-2.5">Status</th>
+                <th class="p-2.5">Waktu & Tanggal</th>
+                <th id="thAksi" class="p-2.5 text-right hidden">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tabelAbsensi" class="divide-y text-slate-700">
+              <tr>
+                <td colspan="6" class="p-4 text-center italic text-slate-400">Memuat data absensi...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    // Master Data 34 Siswa Kelas C4
+    const daftarSiswa = [
+      { no: 1, nama: "Agatha Clara Muljono" },
+      { no: 2, nama: "Aileen Clarabelle Pranowo" },
+      { no: 3, nama: "Alyssa Aurelia Margono" },
+      { no: 4, nama: "Andrea Marie Kwesal" },
+      { no: 5, nama: "Beatrice Agatha Wibowo" },
+      { no: 6, nama: "Edward Miryason Perdana" },
+      { no: 7, nama: "Eileen Jessica Chandra Tjio" },
+      { no: 8, nama: "Elisabeth Annabelle Halim" },
+      { no: 9, nama: "Gabriel Davion Tjakra" },
+      { no: 10, nama: "Giovanni Kevin Pranata" },
+      { no: 11, nama: "Grace Elaine Thobias" },
+      { no: 12, nama: "Jane Clara" },
+      { no: 13, nama: "Jayden Yang Raharjo" },
+      { no: 14, nama: "Jesslyn Adelina Sidharto" },
+      { no: 15, nama: "Jonathan Agatha Putra" },
+      { no: 16, nama: "Jonathan Lyonell Tjandra" },
+      { no: 17, nama: "Joyce Quinn Oei" },
+      { no: 18, nama: "Julia Rosari Kurnia" },
+      { no: 19, nama: "Justin Denzel Darmawan" },
+      { no: 20, nama: "Keane Harsoyo" },
+      { no: 21, nama: "Lim Felix Christian" },
+      { no: 22, nama: "Lionel Christensen Wijaya" },
+      { no: 23, nama: "Louise Kevin Widjaja" },
+      { no: 24, nama: "Maria Yuliana Lie" },
+      { no: 25, nama: "Marlowe James Christianto" },
+      { no: 26, nama: "Nadyenka Naeva Tandiabang" },
+      { no: 27, nama: "Nathaniel Nelson Jonathan" },
+      { no: 28, nama: "Nicholas Kristian Sutanto" },
+      { no: 29, nama: "Peter Gani Tandio" },
+      { no: 30, nama: "Rafael Avelino" },
+      { no: 31, nama: "Raphael Jonathan Yeung" },
+      { no: 32, nama: "Roland Sugiharto" },
+      { no: 33, nama: "Valishia Sabrina Kusuma" },
+      { no: 34, nama: "Vincentius Danny Adrianto Tejo" }
+    ];
+
+    const selectSiswa = document.getElementById("selectSiswa");
+    const formAbsensi = document.getElementById("formAbsensi");
+    const tabelAbsensi = document.getElementById("tabelAbsensi");
+    const btnToggleEdit = document.getElementById("btnToggleEdit");
+    const btnToggleArsip = document.getElementById("btnToggleArsip");
+    const judulTabel = document.getElementById("judulTabel");
+    const subJudulTabel = document.getElementById("subJudulTabel");
+    const thAksi = document.getElementById("thAksi");
+
+    let isEditMode = false;
+    let isArsipMode = false;
+    let dataAbsensiCache = [];
+
+    // Toggle Mode Edit
+    btnToggleEdit.addEventListener("click", () => {
+      isEditMode = !isEditMode;
+      if (isEditMode) {
+        btnToggleEdit.textContent = "✖️ Selesai Edit";
+        btnToggleEdit.className = "text-xs bg-rose-100 hover:bg-rose-200 text-rose-700 font-semibold px-3 py-1.5 rounded-lg border border-rose-300 transition flex items-center gap-1";
+        thAksi.classList.remove("hidden");
+      } else {
+        btnToggleEdit.textContent = "⚙️ Mode Edit";
+        btnToggleEdit.className = "text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg border transition flex items-center gap-1";
+        thAksi.classList.add("hidden");
+      }
+      renderTabel(dataAbsensiCache);
+    });
+
+    // Toggle Mode Arsip vs Hari Ini
+    btnToggleArsip.addEventListener("click", () => {
+      isArsipMode = !isArsipMode;
+      if (isArsipMode) {
+        btnToggleArsip.textContent = "📅 Lihat Hari Ini";
+        judulTabel.textContent = "📁 Arsip Seluruh Absensi";
+        subJudulTabel.textContent = "Menampilkan seluruh rekap riwayat absensi dari awal";
+      } else {
+        btnToggleArsip.textContent = "📁 Lihat Arsip";
+        judulTabel.textContent = "📋 Absensi Hari Ini";
+        subJudulTabel.textContent = "Otomatis direset setiap pergantian hari (24 Jam)";
+      }
+      renderTabel(dataAbsensiCache);
+    });
+
+    // Populasikan Dropdown Pilih Nama
+    daftarSiswa.forEach(s => {
+      const kelompok = s.no <= 20 ? "Absen Kecil" : "Absen Besar";
+      const option = document.createElement("option");
+      option.value = JSON.stringify(s);
+      option.textContent = `${s.no}. ${s.nama} (${kelompok})`;
+      selectSiswa.appendChild(option);
+    });
+
+    // Simpan Kehadiran ke Firebase
+    formAbsensi.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!selectSiswa.value) return;
+
+      const siswaSelected = JSON.parse(selectSiswa.value);
+      const status = document.getElementById("selectStatus").value;
+      const kelompok = siswaSelected.no <= 20 ? "Absen Kecil" : "Absen Besar";
+
+      try {
+        await addDoc(collection(db, "absensi_praktikum"), {
+          noAbsen: siswaSelected.no,
+          nama: siswaSelected.nama,
+          kelompok: kelompok,
+          status: status,
+          timestamp: new Date()
+        });
+        alert(`Absensi ${siswaSelected.nama} berhasil dicatat!`);
+        formAbsensi.reset();
+      } catch (err) {
+        console.error("Gagal simpan absensi: ", err);
+      }
+    });
+
+    // Format Tanggal & Hari
+    function formatWaktuJelas(timestamp, fallbackWaktu) {
+      if (!timestamp) return fallbackWaktu || "-";
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      
+      const hariTgl = date.toLocaleDateString("id-ID", {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+      });
+      const jam = date.toLocaleTimeString("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit"
+      }).replace(".", ":");
+
+      return `${hariTgl} • ${jam}`;
+    }
+
+    // Fungsi Cek Apakah Timestamp Terjadi Hari Ini
+    function isHariIni(timestamp) {
+      if (!timestamp) return false;
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      const today = new Date();
+      return date.getDate() === today.getDate() &&
+             date.getMonth() === today.getMonth() &&
+             date.getFullYear() === today.getFullYear();
+    }
+
+    // Render Tabel
+    function renderTabel(docs) {
+      tabelAbsensi.innerHTML = "";
+
+      // Filter berdasarkan hari ini atau arsip
+      const filteredDocs = docs.filter(item => {
+        if (isArsipMode) return true; // Tampilkan semua di arsip
+        return isHariIni(item.data.timestamp); // Tampilkan hanya hari ini
+      });
+
+      if (filteredDocs.length === 0) {
+        const pesan = isArsipMode 
+          ? "Belum ada riwayat absensi terarsip." 
+          : "Belum ada absensi masuk hari ini (Tabel kosong & siap diisi).";
+        tabelAbsensi.innerHTML = `<tr><td colspan="6" class="p-4 text-center italic text-slate-400">${pesan}</td></tr>`;
+        return;
+      }
+
+      filteredDocs.forEach(item => {
+        const data = item.data;
+        const docId = item.id;
+        const tr = document.createElement("tr");
+        
+        let badgeColor = "bg-emerald-100 text-emerald-800";
+        if (data.status === "Izin") badgeColor = "bg-amber-100 text-amber-800";
+        if (data.status === "Sakit") badgeColor = "bg-rose-100 text-rose-800";
+
+        const waktuFormatted = formatWaktuJelas(data.timestamp, data.waktu);
+
+        tr.innerHTML = `
+          <td class="p-2.5 font-medium">${data.noAbsen}</td>
+          <td class="p-2.5 font-semibold">${data.nama}</td>
+          <td class="p-2.5 text-xs text-slate-500">${data.kelompok}</td>
+          <td class="p-2.5"><span class="px-2 py-1 text-xs rounded-full font-semibold ${badgeColor}">${data.status}</span></td>
+          <td class="p-2.5 text-xs text-slate-600 font-medium">${waktuFormatted}</td>
+          ${isEditMode ? `
+            <td class="p-2.5 text-right space-x-1 whitespace-nowrap">
+              <button onclick="window.editAbsensi('${docId}', '${data.status}', '${data.nama}')" class="bg-amber-500 hover:bg-amber-600 text-white text-xs px-2 py-1 rounded shadow-sm">✏️ Edit</button>
+              <button onclick="window.hapusAbsensi('${docId}', '${data.nama}')" class="bg-rose-500 hover:bg-rose-600 text-white text-xs px-2 py-1 rounded shadow-sm">🗑️ Hapus</button>
+            </td>
+          ` : ''}
+        `;
+        tabelAbsensi.appendChild(tr);
+      });
+    }
+
+    // Baca Data Absensi Realtime
+    onSnapshot(collection(db, "absensi_praktikum"), (snapshot) => {
+      dataAbsensiCache = snapshot.docs
+        .map(d => ({ id: d.id, data: d.data() }))
+        .sort((a, b) => {
+          const tA = a.data.timestamp ? (a.data.timestamp.toDate ? a.data.timestamp.toDate() : new Date(a.data.timestamp)) : 0;
+          const tB = b.data.timestamp ? (b.data.timestamp.toDate ? b.data.timestamp.toDate() : new Date(b.data.timestamp)) : 0;
+          return tB - tA;
+        });
+
+      renderTabel(dataAbsensiCache);
+    });
+
+    // Window global functions untuk Edit & Hapus
+    window.hapusAbsensi = async (id, nama) => {
+      if (confirm(`Apakah Anda yakin ingin menghapus data absensi dari "${nama}"?`)) {
+        try {
+          await deleteDoc(doc(db, "absensi_praktikum", id));
+          alert("Data berhasil dihapus!");
+        } catch (err) {
+          console.error("Gagal hapus: ", err);
+          alert("Gagal menghapus data!");
+        }
+      }
+    };
+
+    window.editAbsensi = async (id, statusLama, nama) => {
+      const statusBaru = prompt(`Ubah status kehadiran untuk ${nama}:\n(Ketik: Hadir / Izin / Sakit)`, statusLama);
+      if (statusBaru && ["Hadir", "Izin", "Sakit"].includes(statusBaru)) {
+        try {
+          await updateDoc(doc(db, "absensi_praktikum", id), {
+            status: statusBaru
+          });
+          alert(`Status ${nama} berhasil diubah menjadi ${statusBaru}!`);
+        } catch (err) {
+          console.error("Gagal edit status: ", err);
+          alert("Gagal memperbarui status!");
+        }
+      } else if (statusBaru !== null) {
+        alert("Status tidak valid! Masukkan kata Hadir, Izin, atau Sakit.");
+      }
+    };
+  </script>
+
+  <div class="container mx-auto px-4 max-w-4xl mt-4 pb-12">
+    <button onclick="kirimPengingatOtomatisBot()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl shadow-md transition flex justify-center items-center gap-2">
+      <span>🤖</span> Kirim Pengingat Praktikum via Bot WA
+    </button>
+  </div>
+
+  <script>
+    async function kirimPengingatOtomatisBot() {
+      const tokenFonnte = "Ti56LcaV9TBLe6ty8B4E"; 
+      const targetWA = "6281234245506"; 
+
+      const isiPesan = `🤖 *PENGINGAT PRAKTIKUM KELAS C4*\n\n` +
+        `Halo teman-teman C4! Mengingatkan kembali jadwal praktikum besok hari Rabu:\n\n` +
+        `🧪 *Jadwal Minggu Ini:*\n` +
+        `• *Absen Kecil (No. 1–20)* / *Absen Besar (No. 21–34)*\n\n` +
+        `📌 Wajib membawa jas laboratorium dan peralatan lengkap.\n` +
+        `Jangan lupa isi presensi di website kelas ya!\n\n` +
+        `_Pesan otomatis dari Bot Kelas C4_`;
+
+      try {
+        const response = await fetch('https://api.fonnte.com/send', {
+          method: 'POST',
+          headers: {
+            'Authorization': tokenFonnte,
+          },
+          body: new URLSearchParams({
+            'target': targetWA,
+            'message': isiPesan,
+          })
+        });
+
+        const result = await response.json();
+        if(result.status) {
+          alert("🎉 Berhasil! Pesan pengingat telah dikirim via Bot WA!");
+        } else {
+          alert("Gagal mengirim: " + result.reason);
+        }
+      } catch (error) {
+        console.error("Error Bot WA:", error);
+        alert("Terjadi kesalahan sistem bot.");
+      }
+    }
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('PWA Service Worker terdaftar!', reg))
+          .catch((err) => console.error('PWA Gagal terdaftar:', err));
+      });
+    }
+  </script>
+</body>
+</html>

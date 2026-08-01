@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Portal XI-C4</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    .login-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(12, 12, 16, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .login-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.6rem;
+      color: #ffffff;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.4rem;
+    }
+
+    .login-subtitle {
+      font-size: 0.7rem;
+      color: #8a8a93;
+      letter-spacing: 0.1em;
+    }
+
+    /* TAB BUTTONS */
+    .tab-buttons {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #8a8a93;
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* FORM GROUP */
+    .form-group {
+      margin-bottom: 1.1rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: #9d8b70;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 0.85rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 0.9rem;
+      margin-top: 0.8rem;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .toggle-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 0.75rem;
+      color: #9d8b70;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .toggle-link:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .footer-action {
+      text-align: center;
+      margin-top: 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <video autoplay loop muted playsinline class="video-bg">
+    <source src="gagak.mp4" type="video/mp4">
+  </video>
+  <div class="video-overlay"></div>
+
+  <div class="viewport login-wrapper">
+    <div class="login-card">
+      
+      <div class="login-header">
+        <h1 class="login-title">PORTAL XI-C4</h1>
+        <p class="login-subtitle">SILAKAN MASUK SESUAI HAK AKSES ANDA</p>
+      </div>
+
+      <div class="tab-buttons">
+        <button type="button" id="tab-btn-anggota" class="tab-btn active">Anggota Siswa</button>
+        <button type="button" id="tab-btn-pengurus" class="tab-btn">Pengurus Kelas</button>
+      </div>
+
+      <div id="form-pengurus" class="hidden">
+        <div class="form-group">
+          <label>EMAIL PENGURUS</label>
+          <input type="email" id="p-email" placeholder="email pengurus kelas">
+        </div>
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <input type="password" id="p-password" placeholder="••••••••">
+        </div>
+        <button type="button" id="btn-login-pengurus" class="btn-submit">MASUK PENGURUS</button>
+      </div>
+
+      <div id="form-anggota-login">
+        <div class="form-group">
+          <label>NOMOR INDUK SISWA</label>
+          <input type="text" id="a-noinduk" placeholder="Masukkan Nomor Induk">
+        </div>
+        <div class="form-group">
+          <label>PASSWORD</label>
+          <input type="password" id="a-password" placeholder="••••••••">
+        </div>
+        <button type="button" id="btn-login-anggota" class="btn-submit">MASUK SISWA</button>
+        
+        <span class="toggle-link" id="link-ke-daftar">Belum punya akun/password? Daftar di sini</span>
+        
+        <div class="footer-action">
+          <span class="toggle-link" id="link-lupa-pw" style="color: #8a8a93; margin-top: 0;">Lupa Password? (Reset Aman)</span>
+        </div>
+      </div>
+
+      <div id="form-anggota-daftar" class="hidden">
+        <div class="form-group">
+          <label>NOMOR INDUK SISWA</label>
+          <input type="text" id="reg-noinduk" placeholder="Nomor Induk">
+        </div>
+        <div class="form-group">
+          <label>NAMA LENGKAP (Sesuai Absen)</label>
+          <input type="text" id="reg-nama" placeholder="Nama Lengkap Kamu">
+        </div>
+        <div class="form-group">
+          <label>BUAT PASSWORD BARU</label>
+          <input type="password" id="reg-password" placeholder="Buat Password">
+        </div>
+        <button type="button" id="btn-daftar-anggota" class="btn-submit" style="border-color: #10b981; color: #10b981;">
+          BUAT AKUN & LOGIN
+        </button>
+        <span class="toggle-link" id="link-ke-login" style="color: #8a8a93;">Sudah punya akun? Kembali ke Login</span>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { db } from "./firebase-config.js";
+    import { 
+      collection, 
+      query, 
+      where, 
+      getDocs, 
+      addDoc,
+      updateDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+    // DATABASE DAFTAR RESMI SISWA XI-C4 (Diambil dari file PDF data siswa)
+    const daftarSiswaValid = [
+      { no_induk: "31129", nama: "Agatha Clara Muljono" },
+      { no_induk: "31130", nama: "Aileen Clarabelle Pranowo" },
+      { no_induk: "31144", nama: "Alyssa Aurelia Margono" },
+      { no_induk: "31149", nama: "Andrea Marie Kwesal" },
+      { no_induk: "31171", nama: "Beatrice Agatha Wibowo" },
+      { no_induk: "31254", nama: "Edward Miryason Perdana" },
+      { no_induk: "31256", nama: "Eileen Jessica Chandra Tjio" },
+      { no_induk: "31258", nama: "Elisabeth Annabelle Halim" },
+      { no_induk: "31290", nama: "Gabriel Davion Tjakra" },
+      { no_induk: "31306", nama: "Giovanni Kevin Pranata" },
+      { no_induk: "31310", nama: "Grace Elaine Thobias" },
+      { no_induk: "31336", nama: "Jane Clara" },
+      { no_induk: "31346", nama: "Jayden Yang Raharjo" },
+      { no_induk: "31366", nama: "Jesslyn Adelina Sidharto" },
+      { no_induk: "31378", nama: "Jonathan Agatha Putra" },
+      { no_induk: "31381", nama: "Jonathan Lyonell Tjandra" },
+      { no_induk: "31392", nama: "Joyce Quinn Oei" },
+      { no_induk: "31393", nama: "Julia Rosari Kurnia" },
+      { no_induk: "31394", nama: "Justin Denzel Darmawan" },
+      { no_induk: "31402", nama: "Keane Harsoyo" },
+      { no_induk: "31440", nama: "Lim Felix Christian" },
+      { no_induk: "31441", nama: "Lionel Christensen Wijaya" },
+      { no_induk: "31446", nama: "Louise Kevin Widjaja" },
+      { no_induk: "31458", nama: "Maria Yuliana Lie" },
+      { no_induk: "31460", nama: "Marlowe James Christianto" },
+      { no_induk: "31487", nama: "Nadyenka Naeva Tandiabang" },
+      { no_induk: "31493", nama: "Nathaniel Nelson Jonathan" },
+      { no_induk: "31497", nama: "Nicholas Kristian Sutanto" },
+      { no_induk: "31511", nama: "Peter Gani Tandio" },
+      { no_induk: "31517", nama: "Rafael Avelino" },
+      { no_induk: "31521", nama: "Raphael Jonathan Yeung" },
+      { no_induk: "31535", nama: "Roland Sugiharto" },
+      { no_induk: "31576", nama: "Valishia Sabrina Kusuma" },
+      { no_induk: "31585", nama: "Vincentius Danny Adrianto Tejo" }
+    ];
+
+    // ELEMENTS
+    const tabAnggota = document.getElementById('tab-btn-anggota');
+    const tabPengurus = document.getElementById('tab-btn-pengurus');
+    const formPengurus = document.getElementById('form-pengurus');
+    const formAnggotaLogin = document.getElementById('form-anggota-login');
+    const formAnggotaDaftar = document.getElementById('form-anggota-daftar');
+    const linkKeDaftar = document.getElementById('link-ke-daftar');
+    const linkKeLogin = document.getElementById('link-ke-login');
+    const linkLupaPw = document.getElementById('link-lupa-pw');
+
+    // TAB SWITCHING
+    tabPengurus.addEventListener('click', () => {
+      tabPengurus.classList.add('active');
+      tabAnggota.classList.remove('active');
+      formPengurus.classList.remove('hidden');
+      formAnggotaLogin.classList.add('hidden');
+      formAnggotaDaftar.classList.add('hidden');
+    });
+
+    tabAnggota.addEventListener('click', () => {
+      tabAnggota.classList.add('active');
+      tabPengurus.classList.remove('active');
+      formPengurus.classList.add('hidden');
+      formAnggotaLogin.classList.remove('hidden');
+      formAnggotaDaftar.classList.add('hidden');
+    });
+
+    linkKeDaftar.addEventListener('click', () => {
+      formAnggotaLogin.classList.add('hidden');
+      formAnggotaDaftar.classList.remove('hidden');
+    });
+
+    linkKeLogin.addEventListener('click', () => {
+      formAnggotaDaftar.classList.add('hidden');
+      formAnggotaLogin.classList.remove('hidden');
+    });
+
+    // SISTEM RESET PASSWORD YANG AMAN (TIDAK MEMUNCULKAN PASSWORD LAMA)
+    if (linkLupaPw) {
+      linkLupaPw.addEventListener('click', async () => {
+        const inputNIS = prompt("Masukkan Nomor Induk Siswa (NIS) Anda:");
+        if (!inputNIS) return;
+
+        const inputNama = prompt("Masukkan Nama Lengkap Anda (sesuai absen untuk verifikasi keamanan):");
+        if (!inputNama) return;
+
+        // Validasi kecocokan data dengan daftar resmi
+        const siswaValid = daftarSiswaValid.find(s => s.no_induk === inputNIS.trim() && s.nama.toLowerCase() === inputNama.trim().toLowerCase());
+
+        if (!siswaValid) {
+          alert("Gagal: Kombinasi Nomor Induk dan Nama Lengkap tidak cocok dengan data resmi kelas XI-C4!");
+          return;
+        }
+
+        try {
+          // Cek apakah sudah terdaftar di Firestore
+          const q = query(collection(db, "users"), where("no_induk", "==", inputNIS.trim()));
+          const querySnapshot = await getDocs(q);
+
+          if (querySnapshot.empty) {
+            alert("Akun dengan Nomor Induk ini belum pernah mendaftar. Silakan buat akun terlebih dahulu!");
+            return;
+          }
+
+          // Minta password baru langsung
+          const passwordBaru = prompt(`Verifikasi Berhasil, ${siswaValid.nama}!\nMasukkan Password Baru Anda:`);
+          if (!passwordBaru) return;
+
+          let docId = "";
+          querySnapshot.forEach(d => docId = d.id);
+
+          // Update password baru di database
+          await updateDoc(doc(db, "users", docId), {
+            password: passwordBaru.trim()
+          });
+
+          alert("Password berhasil diubah! Silakan login kembali menggunakan password baru Anda.");
+        } catch (err) {
+          console.error(err);
+          alert("Terjadi kesalahan sistem: " + err.message);
+        }
+      });
+    }
+
+    // 1. LOGIN PENGURUS
+    document.getElementById('btn-login-pengurus').addEventListener('click', () => {
+      const email = document.getElementById("p-email").value.trim();
+      const pw = document.getElementById("p-password").value.trim();
+
+      if (email === "penguruskelasc4@gmail.com" && pw === "PengurusC4") {
+        localStorage.setItem("userLoggedIn", "true");
+        localStorage.setItem("userNoInduk", email);
+        localStorage.setItem("userRole", "pengurus");
+        localStorage.setItem("userName", "Pengurus Kelas");
+        alert("Login Pengurus Berhasil!");
+        window.location.href = "kas.html";
+      } else {
+        alert("Email atau Password Pengurus Salah!");
+      }
+    });
+
+    // 2. DAFTAR ANGGOTA BARU (Divalidasi dengan List Siswa Resmi)
+    document.getElementById('btn-daftar-anggota').addEventListener('click', async () => {
+      const noInduk = document.getElementById("reg-noinduk").value.trim();
+      const nama = document.getElementById("reg-nama").value.trim();
+      const password = document.getElementById("reg-password").value.trim();
+
+      if (!noInduk || !nama || !password) {
+        alert("Harap isi semua kolom pendaftaran!");
+        return;
+      }
+
+      // Validasi 1: Cek apakah Nomor Induk & Nama ada di file data siswa XI-C4
+      const cekSiswa = daftarSiswaValid.find(s => s.no_induk === noInduk && s.nama.toLowerCase() === nama.toLowerCase());
+      
+      if (!cekSiswa) {
+        alert("Pendaftaran Ditolak: Nomor Induk atau Nama Lengkap tidak terdaftar dalam daftar siswa kelas XI-C4!");
+        return;
+      }
+
+      try {
+        // Validasi 2: Cek apakah sudah pernah terdaftar di database
+        const q = query(collection(db, "users"), where("no_induk", "==", noInduk));
+        const querySnapshot = await getDocs(q);
+
+        if (!querySnapshot.empty) {
+          alert("Nomor Induk ini sudah memiliki akun! Silakan langsung login atau gunakan fitur Lupa Password.");
+          return;
+        }
+
+        // Simpan ke Firestore
+        await addDoc(collection(db, "users"), {
+          no_induk: noInduk,
+          nama: cekSiswa.nama,
+          password: password,
+          role: "anggota"
+        });
+
+        localStorage.setItem("userLoggedIn", "true");
+        localStorage.setItem("userNoInduk", noInduk);
+        localStorage.setItem("userRole", "anggota");
+        localStorage.setItem("userName", cekSiswa.nama);
+
+        alert(`Akun berhasil dibuat! Selamat datang, ${cekSiswa.nama}`);
+        window.location.href = "index.html";
+      } catch (err) {
+        console.error(err);
+        alert("Gagal mendaftar: " + err.message);
+      }
+    });
+
+    // 3. LOGIN ANGGOTA
+    document.getElementById('btn-login-anggota').addEventListener('click', async () => {
+      const noInduk = document.getElementById("a-noinduk").value.trim();
+      const password = document.getElementById("a-password").value.trim();
+
+      if (!noInduk || !password) {
+        alert("Harap isi Nomor Induk dan Password!");
+        return;
+      }
+
+      try {
+        const q = query(collection(db, "users"), where("no_induk", "==", noInduk), where("password", "==", password));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          alert("Nomor Induk atau Password salah! Periksa kembali data Anda.");
+        } else {
+          let userData;
+          querySnapshot.forEach(doc => userData = doc.data());
+
+          localStorage.setItem("userLoggedIn", "true");
+          localStorage.setItem("userNoInduk", userData.no_induk);
+          localStorage.setItem("userRole", "anggota");
+          localStorage.setItem("userName", userData.nama);
+
+          alert(`Selamat datang kembali, ${userData.userName || userData.nama}!`);
+          window.location.href = "index.html";
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Gagal login: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>
